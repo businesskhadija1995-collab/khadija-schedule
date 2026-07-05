@@ -1,0 +1,345 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Georgia', serif;
+    background: linear-gradient(135deg, #f5f5dc 0%, #e8dcc4 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #faf8f0;
+    border-radius: 20px;
+    box-shadow: 0 10px 40px rgba(139, 90, 43, 0.15);
+    padding: 40px;
+    border: 2px solid #d4a574;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #8b7355;
+}
+
+h1 {
+    color: #556b2f;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+#currentDate {
+    color: #8b7355;
+    font-size: 1.1rem;
+    font-style: italic;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 30px;
+    justify-content: center;
+}
+
+.tab-btn {
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-family: 'Georgia', serif;
+    background: #d4a574;
+    color: #3d2914;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.tab-btn:hover {
+    background: #c4956a;
+    transform: translateY(-2px);
+}
+
+.tab-btn.active {
+    background: #556b2f;
+    color: #faf8f0;
+    box-shadow: 0 6px 12px rgba(85, 107, 47, 0.3);
+}
+
+.tab-content {
+    min-height: 400px;
+}
+
+.tab-pane {
+    display: none;
+}
+
+.tab-pane.active {
+    display: block;
+}
+
+.add-task-section {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.add-task-section input {
+    flex: 1;
+    padding: 15px 20px;
+    font-size: 1rem;
+    font-family: 'Georgia', serif;
+    border: 2px solid #d4a574;
+    border-radius: 25px;
+    background: #faf8f0;
+    color: #3d2914;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.add-task-section input:focus {
+    border-color: #556b2f;
+    box-shadow: 0 0 0 3px rgba(85, 107, 47, 0.1);
+}
+
+.add-task-section input::placeholder {
+    color: #a0855b;
+    font-style: italic;
+}
+
+.add-task-section button {
+    padding: 15px 30px;
+    font-size: 1rem;
+    font-family: 'Georgia', serif;
+    background: #556b2f;
+    color: #faf8f0;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.add-task-section button:hover {
+    background: #4a5e29;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(85, 107, 47, 0.3);
+}
+
+.task-list {
+    list-style: none;
+}
+
+.task-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    margin-bottom: 12px;
+    background: #f5f0e6;
+    border-radius: 15px;
+    border-left: 4px solid #556b2f;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.task-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.task-item input[type="checkbox"] {
+    width: 22px;
+    height: 22px;
+    accent-color: #556b2f;
+    cursor: pointer;
+}
+
+.task-item span {
+    flex: 1;
+    color: #3d2914;
+    font-size: 1.1rem;
+}
+
+.task-item.completed span {
+    text-decoration: line-through;
+    color: #8b7355;
+    opacity: 0.7;
+}
+
+.task-symbol {
+    font-size: 1.5rem;
+    margin-right: 10px;
+}
+
+.manage-section {
+    text-align: center;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #8b7355;
+}
+
+.manage-section button {
+    padding: 12px 30px;
+    font-size: 1rem;
+    font-family: 'Georgia', serif;
+    background: #8b7355;
+    color: #faf8f0;
+    border: none;
+    border-radius: 25px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.manage-section button:hover {
+    background: #7a6348;
+    transform: translateY(-2px);
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(61, 41, 20, 0.5);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: #faf8f0;
+    margin: 10% auto;
+    padding: 40px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border: 2px solid #d4a574;
+    position: relative;
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 2rem;
+    color: #8b7355;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.close:hover {
+    color: #556b2f;
+    transform: scale(1.1);
+}
+
+.modal-content h2 {
+    color: #556b2f;
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.manage-tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 25px;
+    justify-content: center;
+}
+
+.manage-tab-btn {
+    padding: 10px 25px;
+    font-size: 0.9rem;
+    font-family: 'Georgia', serif;
+    background: #d4a574;
+    color: #3d2914;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.manage-tab-btn:hover {
+    background: #c4956a;
+}
+
+.manage-tab-btn.active {
+    background: #556b2f;
+    color: #faf8f0;
+}
+
+.manage-tab-pane {
+    display: none;
+}
+
+.manage-tab-pane.active {
+    display: block;
+}
+
+.manage-task-list {
+    list-style: none;
+}
+
+.manage-task-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    margin-bottom: 10px;
+    background: #f5f0e6;
+    border-radius: 12px;
+    border-left: 4px solid #8b7355;
+}
+
+.manage-task-item span {
+    color: #3d2914;
+    font-size: 1rem;
+}
+
+.delete-btn {
+    padding: 8px 20px;
+    font-size: 0.9rem;
+    font-family: 'Georgia', serif;
+    background: #8b4513;
+    color: #faf8f0;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+    background: #a0522d;
+    transform: scale(1.05);
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 20px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    .tab-btn {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .add-task-section {
+        flex-direction: column;
+    }
+    
+    .add-task-section button {
+        width: 100%;
+    }
+}

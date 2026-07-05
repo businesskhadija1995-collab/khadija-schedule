@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Schedule & Habits</title>
+    <link rel="stylesheet" href="stlye.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>My Schedule & Habits</h1>
+            <p id="currentDate"></p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="daily">Daily</button>
+            <button class="tab-btn" data-tab="weekly">Weekly</button>
+            <button class="tab-btn" data-tab="monthly">Monthly</button>
+        </div>
+
+        <div class="tab-content">
+            <div id="daily" class="tab-pane active">
+                <div class="add-task-section">
+                    <input type="text" id="dailyTaskInput" placeholder="Add a daily habit...">
+                    <button onclick="addTask('daily')">Add</button>
+                </div>
+                <ul id="dailyTasks" class="task-list"></ul>
+            </div>
+
+            <div id="weekly" class="tab-pane">
+                <div class="add-task-section">
+                    <input type="text" id="weeklyTaskInput" placeholder="Add a weekly habit...">
+                    <button onclick="addTask('weekly')">Add</button>
+                </div>
+                <ul id="weeklyTasks" class="task-list"></ul>
+            </div>
+
+            <div id="monthly" class="tab-pane">
+                <div class="add-task-section">
+                    <input type="text" id="monthlyTaskInput" placeholder="Add a monthly habit...">
+                    <button onclick="addTask('monthly')">Add</button>
+                </div>
+                <ul id="monthlyTasks" class="task-list"></ul>
+            </div>
+        </div>
+
+        <div class="manage-section">
+            <button onclick="openManageModal()">Manage Habits</button>
+        </div>
+    </div>
+
+    <div id="manageModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeManageModal()">&times;</span>
+            <h2>Manage Your Habits</h2>
+            <div class="manage-tabs">
+                <button class="manage-tab-btn active" data-manage-tab="manage-daily">Daily</button>
+                <button class="manage-tab-btn" data-manage-tab="manage-weekly">Weekly</button>
+                <button class="manage-tab-btn" data-manage-tab="manage-monthly">Monthly</button>
+            </div>
+            <div id="manage-daily" class="manage-tab-pane active">
+                <ul id="manageDailyTasks" class="manage-task-list"></ul>
+            </div>
+            <div id="manage-weekly" class="manage-tab-pane">
+                <ul id="manageWeeklyTasks" class="manage-task-list"></ul>
+            </div>
+            <div id="manage-monthly" class="manage-tab-pane">
+                <ul id="manageMonthlyTasks" class="manage-task-list"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
