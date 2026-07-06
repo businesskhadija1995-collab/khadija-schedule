@@ -80,8 +80,14 @@ function loadData() {
 
 // Save data to localStorage
 function saveData() {
-    localStorage.setItem('habits', JSON.stringify(habits));
-    localStorage.setItem('completions', JSON.stringify(completions));
+    try {
+        localStorage.setItem('habits', JSON.stringify(habits));
+        localStorage.setItem('completions', JSON.stringify(completions));
+        console.log('Data saved to localStorage:', habits);
+    } catch (error) {
+        console.error('Error saving to localStorage:', error);
+        alert('Error saving data. Please make sure localStorage is enabled in your browser.');
+    }
 }
 
 // Save reminder settings
@@ -225,6 +231,8 @@ function addTask(type) {
         };
         
         habits[type].push(habit);
+        console.log(`Added ${type} habit:`, taskText);
+        console.log(`Total ${type} habits:`, habits[type].length);
         saveData();
         input.value = '';
         renderAllTasks();
@@ -475,6 +483,8 @@ function renderTasks(type) {
     const list = document.getElementById(listId);
     list.innerHTML = '';
     
+    console.log(`Rendering ${type} tasks, count:`, habits[type].length);
+    
     habits[type].forEach(habit => {
         const li = document.createElement('li');
         li.className = 'task-item';
@@ -499,6 +509,8 @@ function renderTasks(type) {
         li.appendChild(span);
         list.appendChild(li);
     });
+    
+    console.log(`Rendered ${type} tasks, DOM elements:`, list.children.length);
 }
 
 // Render manage tasks
