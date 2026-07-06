@@ -48,6 +48,16 @@
         <div class="manage-section">
             <button onclick="openManageModal()">Manage Habits</button>
         </div>
+
+        <div class="email-section">
+            <h2>Email Notifications</h2>
+            <div class="email-controls">
+                <button onclick="sendDailyReport()">Send Daily Report</button>
+                <button onclick="sendWeeklyReport()">Send Weekly Report</button>
+                <button onclick="sendMonthlyReport()">Send Monthly Report</button>
+            </div>
+            <div id="emailStatus" class="email-status"></div>
+        </div>
     </div>
 
     <div id="manageModal" class="modal">
@@ -71,6 +81,7 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

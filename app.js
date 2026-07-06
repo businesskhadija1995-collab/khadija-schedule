@@ -12,6 +12,12 @@ let completions = {
     monthly: {}
 };
 
+// EmailJS Configuration - REPLACE WITH YOUR ACTUAL VALUES
+const EMAILJS_PUBLIC_KEY = 'SBoX6bx7M9EVmVeji';
+const EMAILJS_SERVICE_ID = 'service_hm3g7t9';
+const EMAILJS_TEMPLATE_ID = 'template_0exa8cq';
+const RECIPIENT_EMAIL = 'businesskhadija18@gmail.com';
+
 // Initialize the app
 function init() {
     loadData();
@@ -20,6 +26,11 @@ function init() {
     setupManageTabs();
     renderAllTasks();
     renderManageTasks();
+    
+    // Initialize EmailJS (will work once you add your public key)
+    if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== 'YOUR_EMAILJS_PUBLIC_KEY') {
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+    }
 }
 
 // Load data from localStorage
@@ -475,6 +486,105 @@ window.onclick = function(event) {
     if (event.target === modal) {
         closeManageModal();
     }
+}
+
+// Send daily report email
+function sendDailyReport() {
+    sendEmailReport('daily', 'Daily Habits Report');
+}
+
+// Send weekly report email
+function sendWeeklyReport() {
+    sendEmailReport('weekly', 'Weekly Habits Report');
+}
+
+// Send monthly report email
+function sendMonthlyReport() {
+    sendEmailReport('monthly', 'Monthly Habits Report');
+}
+
+// Generic email report sender
+function sendEmailReport(type, subject) {
+    // Check if EmailJS is configured
+    if (EMAILJS_PUBLIC_KEY === 'YOUR_EMAILJS_PUBLIC_KEY') {
+        showEmailStatus('Please configure EmailJS first. See instructions in the code.', 'error');
+        return;
+    }
+
+    const statusDiv = document.getElementById('emailStatus');
+    statusDiv.textContent = 'Sending email...';
+    statusDiv.className = 'email-status sending';
+
+    // Generate report content
+    const report = generateReport(type);
+    
+    const templateParams = {
+        to_email: RECIPIENT_EMAIL,
+        subject: subject,
+        report_content: report.content,
+        report_date: new Date().toLocaleDateString(),
+        report_type: type
+    };
+
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+        .then(function() {
+            showEmailStatus('Email sent successfully to ' + RECIPIENT_EMAIL, 'success');
+        }, function(error) {
+            showEmailStatus('Failed to send email: ' + JSON.stringify(error), 'error');
+        });
+}
+
+// Generate report content for a specific type
+function generateReport(type) {
+    const today = new Date();
+    let content = '';
+    
+    content += `<h2>${type.charAt(0).toUpperCase() + type.slice(1)} Habits Report</h2>`;
+    content += `<p><strong>Date:</strong> ${today.toLocaleDateString()}</p>`;
+    content += `<p><strong>Time:</strong> ${today.toLocaleTimeString()}</p>`;
+    
+    content += `<h3>Your ${type} Habits:</h3>`;
+    content += `<ul>`;
+    
+    if (habits[type] && habits[type].length > 0) {
+        habits[type].forEach(habit => {
+            const completed = isCompleted(type, habit.id);
+            const status = completed ? '✅ Completed' : '⬜ Not completed';
+            content += `<li>${habit.text} - ${status}</li>`;
+        });
+    } else {
+        content += `<li>No ${type} habits set up yet.</li>`;
+    }
+    
+    content += `</ul>`;
+    
+    // Add completion statistics
+    const total = habits[type].length;
+    const completedCount = habits[type].filter(h => isCompleted(type, h.id)).length;
+    const percentage = total > 0 ? Math.round((completedCount / total) * 100) : 0;
+    
+    content += `<h3>Progress:</h3>`;
+    content += `<p>Completed: ${completedCount}/${total} (${percentage}%)</p>`;
+    
+    return {
+        content: content,
+        total: total,
+        completed: completedCount,
+        percentage: percentage
+    };
+}
+
+// Show email status message
+function showEmailStatus(message, type) {
+    const statusDiv = document.getElementById('emailStatus');
+    statusDiv.textContent = message;
+    statusDiv.className = 'email-status ' + type;
+    
+    // Clear status after 5 seconds
+    setTimeout(() => {
+        statusDiv.textContent = '';
+        statusDiv.className = 'email-status';
+    }, 5000);
 }
 
 // Initialize on page load
