@@ -19,6 +19,8 @@ body {
     box-shadow: 0 10px 40px rgba(139, 90, 43, 0.15);
     padding: 40px;
     border: 2px solid #d4a574;
+    max-height: none;
+    overflow: visible;
 }
 
 header {
@@ -74,6 +76,7 @@ h1 {
 
 .tab-content {
     min-height: 400px;
+    max-height: none;
 }
 
 .tab-pane {
