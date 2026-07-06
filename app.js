@@ -27,6 +27,9 @@ function init() {
     renderAllTasks();
     renderManageTasks();
     
+    // Update time every second
+    setInterval(displayCurrentDate, 1000);
+    
     // Initialize EmailJS (will work once you add your public key)
     if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== 'YOUR_EMAILJS_PUBLIC_KEY') {
         emailjs.init(EMAILJS_PUBLIC_KEY);
@@ -106,11 +109,13 @@ function getMonthKey() {
     return `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
 }
 
-// Display current date
+// Display current date and time
 function displayCurrentDate() {
-    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-    const today = new Date().toLocaleDateString('en-US', options);
-    document.getElementById('currentDate').textContent = today;
+    const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    const today = new Date().toLocaleDateString('en-US', dateOptions);
+    const time = new Date().toLocaleTimeString('en-US', timeOptions);
+    document.getElementById('currentDate').textContent = `${today} • ${time}`;
 }
 
 // Setup tab switching
