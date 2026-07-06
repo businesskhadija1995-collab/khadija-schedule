@@ -12,6 +12,20 @@ let completions = {
     monthly: {}
 };
 
+// Reminder settings
+let reminderSettings = {
+    daily: { enabled: false, time: '09:00' },
+    weekly: { enabled: false, day: 1, time: '09:00' },
+    monthly: { enabled: false, day: 1, time: '09:00' }
+};
+
+// Track when reminders were last sent
+let lastReminderSent = {
+    daily: null,
+    weekly: null,
+    monthly: null
+};
+
 // EmailJS Configuration - REPLACE WITH YOUR ACTUAL VALUES
 const EMAILJS_PUBLIC_KEY = 'SBoX6bx7M9EVmVeji';
 const EMAILJS_SERVICE_ID = 'service_hm3g7t9';
@@ -30,6 +44,9 @@ function init() {
     // Update time every second
     setInterval(displayCurrentDate, 1000);
     
+    // Check reminders every minute
+    setInterval(checkReminders, 60000);
+    
     // Initialize EmailJS (will work once you add your public key)
     if (typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== 'YOUR_EMAILJS_PUBLIC_KEY') {
         emailjs.init(EMAILJS_PUBLIC_KEY);
@@ -40,6 +57,7 @@ function init() {
 function loadData() {
     const savedHabits = localStorage.getItem('habits');
     const savedCompletions = localStorage.getItem('completions');
+    const savedReminderSettings = localStorage.getItem('reminderSettings');
     
     if (savedHabits) {
         habits = JSON.parse(savedHabits);
@@ -49,14 +67,53 @@ function loadData() {
         completions = JSON.parse(savedCompletions);
     }
     
+    if (savedReminderSettings) {
+        reminderSettings = JSON.parse(savedReminderSettings);
+    }
+    
     // Clean up old completions
     cleanOldCompletions();
+    
+    // Load reminder settings into UI
+    loadReminderSettings();
 }
 
 // Save data to localStorage
 function saveData() {
     localStorage.setItem('habits', JSON.stringify(habits));
     localStorage.setItem('completions', JSON.stringify(completions));
+}
+
+// Save reminder settings
+function saveReminderSettings() {
+    reminderSettings.daily.enabled = document.getElementById('dailyReminderEnabled').checked;
+    reminderSettings.daily.time = document.getElementById('dailyReminderTime').value;
+    
+    reminderSettings.weekly.enabled = document.getElementById('weeklyReminderEnabled').checked;
+    reminderSettings.weekly.day = parseInt(document.getElementById('weeklyReminderDay').value);
+    reminderSettings.weekly.time = document.getElementById('weeklyReminderTime').value;
+    
+    reminderSettings.monthly.enabled = document.getElementById('monthlyReminderEnabled').checked;
+    reminderSettings.monthly.day = parseInt(document.getElementById('monthlyReminderDay').value);
+    reminderSettings.monthly.time = document.getElementById('monthlyReminderTime').value;
+    
+    localStorage.setItem('reminderSettings', JSON.stringify(reminderSettings));
+    
+    showReminderStatus('Reminder settings saved');
+}
+
+// Load reminder settings into UI
+function loadReminderSettings() {
+    document.getElementById('dailyReminderEnabled').checked = reminderSettings.daily.enabled;
+    document.getElementById('dailyReminderTime').value = reminderSettings.daily.time;
+    
+    document.getElementById('weeklyReminderEnabled').checked = reminderSettings.weekly.enabled;
+    document.getElementById('weeklyReminderDay').value = reminderSettings.weekly.day;
+    document.getElementById('weeklyReminderTime').value = reminderSettings.weekly.time;
+    
+    document.getElementById('monthlyReminderEnabled').checked = reminderSettings.monthly.enabled;
+    document.getElementById('monthlyReminderDay').value = reminderSettings.monthly.day;
+    document.getElementById('monthlyReminderTime').value = reminderSettings.monthly.time;
 }
 
 // Clean up old completions to prevent storage bloat
@@ -590,6 +647,88 @@ function showEmailStatus(message, type) {
         statusDiv.textContent = '';
         statusDiv.className = 'email-status';
     }, 5000);
+}
+
+// Show reminder status message
+function showReminderStatus(message) {
+    const statusDiv = document.getElementById('reminderStatus');
+    statusDiv.textContent = message;
+    statusDiv.className = 'reminder-status';
+    
+    // Clear status after 3 seconds
+    setTimeout(() => {
+        statusDiv.textContent = '';
+        statusDiv.className = 'reminder-status';
+    }, 3000);
+}
+
+// Check if it's time to send reminders
+function checkReminders() {
+    const now = new Date();
+    const currentTime = now.getHours() * 60 + now.getMinutes();
+    const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
+    const currentDate = now.getDate();
+    
+    // Check daily reminder
+    if (reminderSettings.daily.enabled) {
+        const [hours, minutes] = reminderSettings.daily.time.split(':').map(Number);
+        const reminderTime = hours * 60 + minutes;
+        
+        if (currentTime === reminderTime && shouldSendReminder('daily', now)) {
+            sendDailyReport();
+            lastReminderSent.daily = now.toISOString();
+            showReminderStatus('Daily reminder sent!');
+        }
+    }
+    
+    // Check weekly reminder
+    if (reminderSettings.weekly.enabled && currentDay === reminderSettings.weekly.day) {
+        const [hours, minutes] = reminderSettings.weekly.time.split(':').map(Number);
+        const reminderTime = hours * 60 + minutes;
+        
+        if (currentTime === reminderTime && shouldSendReminder('weekly', now)) {
+            sendWeeklyReport();
+            lastReminderSent.weekly = now.toISOString();
+            showReminderStatus('Weekly reminder sent!');
+        }
+    }
+    
+    // Check monthly reminder
+    if (reminderSettings.monthly.enabled && currentDate === reminderSettings.monthly.day) {
+        const [hours, minutes] = reminderSettings.monthly.time.split(':').map(Number);
+        const reminderTime = hours * 60 + minutes;
+        
+        if (currentTime === reminderTime && shouldSendReminder('monthly', now)) {
+            sendMonthlyReport();
+            lastReminderSent.monthly = now.toISOString();
+            showReminderStatus('Monthly reminder sent!');
+        }
+    }
+}
+
+// Check if reminder should be sent (prevent duplicate sends)
+function shouldSendReminder(type, now) {
+    if (!lastReminderSent[type]) return true;
+    
+    const lastSent = new Date(lastReminderSent[type]);
+    const diff = now - lastSent;
+    
+    // For daily: only send if last sent was yesterday or earlier
+    if (type === 'daily') {
+        return diff >= 24 * 60 * 60 * 1000; // 24 hours
+    }
+    
+    // For weekly: only send if last sent was 7+ days ago
+    if (type === 'weekly') {
+        return diff >= 7 * 24 * 60 * 60 * 1000; // 7 days
+    }
+    
+    // For monthly: only send if last sent was 30+ days ago
+    if (type === 'monthly') {
+        return diff >= 30 * 24 * 60 * 60 * 1000; // 30 days
+    }
+    
+    return true;
 }
 
 // Initialize on page load

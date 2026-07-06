@@ -58,6 +58,51 @@
             </div>
             <div id="emailStatus" class="email-status"></div>
         </div>
+
+        <div class="reminder-section">
+            <h2>Automatic Reminders</h2>
+            <div class="reminder-controls">
+                <div class="reminder-setting">
+                    <label>Daily Reminder Time:</label>
+                    <input type="time" id="dailyReminderTime" value="09:00">
+                    <label class="reminder-toggle">
+                        <input type="checkbox" id="dailyReminderEnabled" onchange="saveReminderSettings()">
+                        <span>Enable</span>
+                    </label>
+                </div>
+                <div class="reminder-setting">
+                    <label>Weekly Reminder Day:</label>
+                    <select id="weeklyReminderDay" onchange="saveReminderSettings()">
+                        <option value="1">Monday</option>
+                        <option value="2">Tuesday</option>
+                        <option value="3">Wednesday</option>
+                        <option value="4">Thursday</option>
+                        <option value="5">Friday</option>
+                        <option value="6">Saturday</option>
+                        <option value="0">Sunday</option>
+                    </select>
+                    <input type="time" id="weeklyReminderTime" value="09:00">
+                    <label class="reminder-toggle">
+                        <input type="checkbox" id="weeklyReminderEnabled" onchange="saveReminderSettings()">
+                        <span>Enable</span>
+                    </label>
+                </div>
+                <div class="reminder-setting">
+                    <label>Monthly Reminder Day:</label>
+                    <select id="monthlyReminderDay" onchange="saveReminderSettings()">
+                        <option value="1">1st</option>
+                        <option value="15">15th</option>
+                        <option value="30">30th</option>
+                    </select>
+                    <input type="time" id="monthlyReminderTime" value="09:00">
+                    <label class="reminder-toggle">
+                        <input type="checkbox" id="monthlyReminderEnabled" onchange="saveReminderSettings()">
+                        <span>Enable</span>
+                    </label>
+                </div>
+            </div>
+            <div id="reminderStatus" class="reminder-status"></div>
+        </div>
     </div>
 
     <div id="manageModal" class="modal">

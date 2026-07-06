@@ -388,6 +388,91 @@ h1 {
     border: 1px solid #f5c6cb;
 }
 
+.reminder-section {
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 2px solid #8b7355;
+}
+
+.reminder-section h2 {
+    color: #556b2f;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.reminder-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.reminder-setting {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    background: #f5f0e6;
+    border-radius: 15px;
+    border-left: 4px solid #556b2f;
+    flex-wrap: wrap;
+}
+
+.reminder-setting label {
+    color: #3d2914;
+    font-size: 1rem;
+    font-family: 'Georgia', serif;
+}
+
+.reminder-setting input[type="time"],
+.reminder-setting select {
+    padding: 8px 15px;
+    font-size: 1rem;
+    font-family: 'Georgia', serif;
+    border: 2px solid #d4a574;
+    border-radius: 10px;
+    background: #faf8f0;
+    color: #3d2914;
+    outline: none;
+}
+
+.reminder-setting input[type="time"]:focus,
+.reminder-setting select:focus {
+    border-color: #556b2f;
+}
+
+.reminder-toggle {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.reminder-toggle input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #556b2f;
+    cursor: pointer;
+}
+
+.reminder-toggle span {
+    color: #3d2914;
+    font-size: 0.95rem;
+    font-family: 'Georgia', serif;
+}
+
+.reminder-status {
+    text-align: center;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 15px;
+    font-size: 0.95rem;
+    font-style: italic;
+    color: #556b2f;
+    background: #f5f0e6;
+}
+
 @media (max-width: 600px) {
     .container {
         padding: 20px;
