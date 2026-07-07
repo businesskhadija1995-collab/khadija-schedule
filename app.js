@@ -219,9 +219,18 @@ function setupManageTabs() {
 
 // Add a new habit
 function addTask(type) {
+    console.log('addTask called with type:', type);
+    
     const inputId = `${type}TaskInput`;
     const input = document.getElementById(inputId);
+    
+    if (!input) {
+        console.error('Input element not found:', inputId);
+        return;
+    }
+    
     const taskText = input.value.trim();
+    console.log('Task text:', taskText);
     
     if (taskText) {
         const habit = {
@@ -233,10 +242,13 @@ function addTask(type) {
         habits[type].push(habit);
         console.log(`Added ${type} habit:`, taskText);
         console.log(`Total ${type} habits:`, habits[type].length);
+        console.log('Habits array:', habits);
         saveData();
         input.value = '';
         renderAllTasks();
         renderManageTasks();
+    } else {
+        console.log('Task text is empty, not adding');
     }
 }
 
@@ -296,7 +308,7 @@ function renderAllTasks() {
 }
 
 // Get contextual emoji based on habit text
-function getContextualEmoji(text) {
+function getContextualEmoji(text, type) {
     const lowerText = text.toLowerCase();
     
     const emojiMap = {
@@ -494,7 +506,7 @@ function renderTasks(type) {
         
         const symbol = document.createElement('span');
         symbol.className = 'task-symbol';
-        symbol.textContent = getContextualEmoji(habit.text);
+        symbol.textContent = getContextualEmoji(habit.text, type);
         
         const checkbox = document.createElement('input');
         checkbox.type = 'checkbox';
